@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apartment Management System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        h1, h2, h3 {
+            color: #333;
+            text-align: center;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        form {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #666;
+            font-size: 16px;
+        }
+        input[type="text"],
+        input[type="number"],
+        input[type="tel"] {
+            width: calc(100% - 24px);
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button[type="submit"]:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Apartment Management System</h1>
+
+    <h2>Apartments</h2>
+    <table>
+        <tr>
+            <th>Apartment Number</th>
+            <th>Area</th>
+            <th>Rent</th>
+            <th>Action</th>
+        </tr>
+        {% for apartment in apartments %}
+            <tr>
+                <td>{{ apartment[1] }}</td>
+                <td>{{ apartment[2] }}</td>
+                <td>{{ apartment[3] }}</td>
+                <td><a href="/delete_apartment/{{ apartment[0] }}">Delete</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h3>Add Apartment</h3>
+    <form action="/add_apartment" method="POST">
+        <label>Apartment Number:</label>
+        <input type="number" name="apartment_number" required><br>
+        <label>Area:</label>
+        <input type="number" name="area" step="0.01" required><br>
+        <label>Rent:</label>
+        <input type="number" name="rent" step="0.01" required><br>
+        <button type="submit">Add Apartment</button>
+    </form>
+
+    <h2>Tenants</h2>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Mobile Number</th>
+            <th>Apartment ID</th>
+            <th>Action</th>
+        </tr>
+        {% for tenant in tenants %}
+            <tr>
+                <td>{{ tenant[1] }}</td>
+                <td>{{ tenant[2] }}</td>
+                <td>{{ tenant[3] }}</td>
+                <td><a href="/delete_tenant/{{ tenant[0] }}">Delete</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+    <h3>Add Tenant</h3>
+    <form action="/add_tenant" method="POST">
+        <label>Name:</label>
+        <input type="text" name="name" required><br>
+        <label>Mobile Number:</label>
+        <input type="tel" name="mobile_number" pattern="[0-9]{10}" required><br>
+        <label>Apartment ID:</label>
+        <input type="number" name="apartment_id" required><br>
+        <button type="submit">Add Tenant</button>
+    </form>
+</body>
+</html>
