@@ -4,131 +4,188 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apartment Management System</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
             background-color: #f9f9f9;
+            padding-top: 20px;
+            padding-bottom: 20px;
         }
-        h1, h2, h3 {
-            color: #333;
+        .container {
+            max-width: 800px;
+        }
+        .header {
             text-align: center;
+            margin-bottom: 30px;
         }
-        table {
-            border-collapse: collapse;
-            width: 100%;
+        .card {
             margin-bottom: 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
         }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
+        .card-header {
+            background-color: #007bff;
+            color: #fff;
         }
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
         }
-        form {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        label {
-            display: block;
-            margin-bottom: 6px;
-            color: #666;
-            font-size: 16px;
-        }
-        input[type="text"],
-        input[type="number"],
-        input[type="tel"] {
-            width: calc(100% - 24px);
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-        button[type="submit"] {
-            background-color: #4CAF50;
-            color: white;
-            padding: 12px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-            transition: background-color 0.3s;
-        }
-        button[type="submit"]:hover {
-            background-color: #45a049;
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <h1>Apartment Management System</h1>
+    <div class="container">
+        <div class="header">
+            <h1>Apartment Management System</h1>
+            <h3>Dashboard</h3>
+        </div>
 
-    <h2>Apartments</h2>
-    <table>
-        <tr>
-            <th>Apartment Number</th>
-            <th>Area</th>
-            <th>Rent</th>
-            <th>Action</th>
-        </tr>
-        {% for apartment in apartments %}
-            <tr>
-                <td>{{ apartment[1] }}</td>
-                <td>{{ apartment[2] }}</td>
-                <td>{{ apartment[3] }}</td>
-                <td><a href="/delete_apartment/{{ apartment[0] }}">Delete</a></td>
-            </tr>
-        {% endfor %}
-    </table>
-    <h3>Add Apartment</h3>
-    <form action="/add_apartment" method="POST">
-        <label>Apartment Number:</label>
-        <input type="number" name="apartment_number" required><br>
-        <label>Area:</label>
-        <input type="number" name="area" step="0.01" required><br>
-        <label>Rent:</label>
-        <input type="number" name="rent" step="0.01" required><br>
-        <button type="submit">Add Apartment</button>
-    </form>
+        <div class="card">
+            <div class="card-header">
+                Summary
+            </div>
+            <div class="card-body">
+                <p>Total Apartments: {{ total_apartments }}</p>
+                <p>Total Tenants: {{ total_tenants }}</p>
+                <p>Vacant Apartments: {{ vacant_apartments }}</p>
+            </div>
+        </div>
 
-    <h2>Tenants</h2>
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Mobile Number</th>
-            <th>Apartment ID</th>
-            <th>Action</th>
-        </tr>
-        {% for tenant in tenants %}
-            <tr>
-                <td>{{ tenant[1] }}</td>
-                <td>{{ tenant[2] }}</td>
-                <td>{{ tenant[3] }}</td>
-                <td><a href="/delete_tenant/{{ tenant[0] }}">Delete</a></td>
-            </tr>
-        {% endfor %}
-    </table>
-    <h3>Add Tenant</h3>
-    <form action="/add_tenant" method="POST">
-        <label>Name:</label>
-        <input type="text" name="name" required><br>
-        <label>Mobile Number:</label>
-        <input type="tel" name="mobile_number" pattern="[0-9]{10}" required><br>
-        <label>Apartment ID:</label>
-        <input type="number" name="apartment_id" required><br>
-        <button type="submit">Add Tenant</button>
-    </form>
+        <div class="card">
+            <div class="card-header">
+                Apartments
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Apartment Number</th>
+                            <th>Area</th>
+                            <th>Rent</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for apartment in apartments %}
+                            <tr>
+                                <td>{{ apartment[1] }}</td>
+                                <td>{{ apartment[2] }}</td>
+                                <td>{{ apartment[3] }}</td>
+                                <td>
+                                    <a href="/edit_apartment/{{ apartment[0] }}" class="btn btn-primary">Edit</a>
+                                    <a href="/delete_apartment/{{ apartment[0] }}" class="btn btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <form action="/search" method="GET" class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="text" name="q" placeholder="Search..." aria-label="Search">
+                    <button class="btn btn-primary my-2 my-sm-0" type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                Add Apartment
+            </div>
+            <div class="card-body">
+                <form action="/add_apartment" method="POST">
+                    <div class="form-group">
+                        <label for="apartment_number">Apartment Number:</label>
+                        <input type="number" class="form-control" id="apartment_number" name="apartment_number" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="area">Area:</label>
+                        <input type="number" class="form-control" id="area" name="area" step="0.01" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="rent">Rent:</label>
+                        <input type="number" class="form-control" id="rent" name="rent" step="0.01" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Apartment</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                Tenants
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Mobile Number</th>
+                            <th>Apartment ID</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tenant in tenants %}
+                            <tr>
+                                <td>{{ tenant[1] }}</td>
+                                <td>{{ tenant[2] }}</td>
+                                <td>{{ tenant[3] }}</td>
+                                <td>
+                                    <a href="/delete_tenant/{{ tenant[0] }}" class="btn btn-danger">Delete</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                Add Tenant
+            </div>
+            <div class="card-body">
+                <form action="/add_tenant" method="POST">
+                    <div class="form-group">
+                        <label for="name">Name:</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="mobile_number">Mobile Number:</label>
+                        <input type="tel" class="form-control" id="mobile_number" name="mobile_number" pattern="[0-9]{10}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="apartment_id">Apartment ID:</label>
+                        <input type="number" class="form-control" id="apartment_id" name="apartment_id" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add Tenant</button>
+                </form>
+            </div>
+        </div>
+        <h1>Exit Application</h1>
+        <p>Click the button below to exit the application.</p>
+        <button id="exitButton">Exit</button>
+    
+        <script>
+            document.getElementById('exitButton').addEventListener('click', function() {
+                // Send a request to the '/exit' route when the button is clicked
+                fetch('/exit')
+                    .then(response => {
+                        if (response.ok) {
+                            console.log('Application exited successfully');
+                        } else {
+                            console.error('Failed to exit application');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                    });
+            });
+        </script>
+    </div>
 </body>
 </html>
+
